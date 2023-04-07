@@ -1,7 +1,30 @@
 
+import axios from "axios";
 import Link from "next/link"
+import { useState } from "react"
+import { StringLiteral } from "typescript";
 
 export const Navbar = (): JSX.Element => {
+    interface IMovieFilter {
+        pageSize: number;
+        filter: {
+            searchText: any
+            rated: number
+        }
+    }
+
+    const [myValue, setMyValue] = useState<IMovieFilter>()
+    function filteredData(e: any): void {
+        const newObj = {
+            pageSize: 1,
+            filter: {
+                searchText: e,
+                rated: 2
+            }
+        }
+        setMyValue(newObj);
+    }
+
     return (
         <>
             <div className="h-20 flex items-center" style={{ background: "#fa320a" }}>
@@ -16,6 +39,7 @@ export const Navbar = (): JSX.Element => {
                     <input
                         className="w-full rounded-md border pt-2 border-black "
                         placeholder="Search ..."
+                        onChange={(e) => filteredData(e.target.value)}
                     />
                 </div>
                 <div className="w-96 pl-4 items-center">

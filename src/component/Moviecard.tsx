@@ -6,6 +6,7 @@ interface myProps {
     key?: number;
 }
 
+
 export const Moviecard = ({ elem }: myProps): JSX.Element => {
     if (elem.poster) {
         return (

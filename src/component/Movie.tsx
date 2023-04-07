@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { getEnvironmentData } from "worker_threads";
 import { Moviecard } from "./Moviecard";
 import axios from "axios";
+import { METHODS } from "http";
 
 
 
