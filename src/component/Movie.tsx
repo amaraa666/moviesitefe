@@ -1,10 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { getEnvironmentData } from "worker_threads";
 import { Moviecard } from "./Moviecard";
 import axios from "axios";
-import { METHODS } from "http";
-
+import { MySearchText } from "./useContext";
+import { useContext } from "react";
 
 
 export interface IMovie {
@@ -51,18 +50,25 @@ export interface IMovie {
 const Movies = (): JSX.Element => {
     const [movies, setMovies] = useState<Array<IMovie>>([]);
 
+    const { myVal } = useContext(MySearchText);
+
     useEffect(() => {
         getData();
-    }, []);
+    }, [myVal]);
 
-    const getData = () => {
-        axios
-            .get('http://localhost:6060/api/movies')
+    const getData = async () => {
+        console.log(myVal)
+        const res = await axios
+            .post('http://localhost:6060/api/movies', myVal)
             .then((res) => {
                 console.log(res.data.result);
                 setMovies(res.data.result);
+                const { totalRows } = res.data;
+                console.log(totalRows)
+
             })
             .catch((err) => console.log(err))
+
     };
 
 

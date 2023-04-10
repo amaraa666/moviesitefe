@@ -1,29 +1,22 @@
 
 import axios from "axios";
 import Link from "next/link"
-import { useState } from "react"
-import { StringLiteral } from "typescript";
+import { useContext } from "react";
+import { MySearchText } from "./useContext";
 
 export const Navbar = (): JSX.Element => {
-    interface IMovieFilter {
-        pageSize: number;
-        filter: {
-            searchText: any
-            rated: number
-        }
-    }
+    const { setMyVal } = useContext(MySearchText);
 
-    const [myValue, setMyValue] = useState<IMovieFilter>()
     function filteredData(e: any): void {
         const newObj = {
             pageSize: 1,
             filter: {
+                isFiltered: true,
                 searchText: e,
-                rated: 2
             }
         }
-        setMyValue(newObj);
-    }
+        setMyVal(newObj);
+    };
 
     return (
         <>
