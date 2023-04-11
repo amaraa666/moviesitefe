@@ -4,6 +4,7 @@ import { Moviecard } from "./Moviecard";
 import axios from "axios";
 import { MySearchText } from "./useContext";
 import { useContext } from "react";
+import Pagination from './Pagination';
 
 
 export interface IMovie {
@@ -45,30 +46,40 @@ export interface IMovie {
     };
 }
 
-
+interface IProp{
+    pageSize: number;
+    totalRows: number;
+}
 
 const Movies = (): JSX.Element => {
     const [movies, setMovies] = useState<Array<IMovie>>([]);
+    const [myRow , setMyRow] = useState<IProp>()
+    const [myPage ,setMyPage] = useState('')
 
     const { myVal } = useContext(MySearchText);
 
     useEffect(() => {
         getData();
-    }, [myVal]);
+    }, [myVal , myPage]);
 
     const getData = async () => {
         console.log(myVal)
+        const page = new URLSearchParams(window.location.search)
+        setMyPage(page.get("page"))
         const res = await axios
-            .post('http://localhost:6060/api/movies', myVal)
+            .post('http://localhost:6060/api/movies',{ myVal , myPage})
             .then((res) => {
                 console.log(res.data.result);
                 setMovies(res.data.result);
                 const { totalRows } = res.data;
-                console.log(totalRows)
-
+                const myProp ={
+                    pageSize: Math.floor(totalRows/30),
+                    totalRows
+                }
+                console.log(myProp)
+                setMyRow(myProp);
             })
             .catch((err) => console.log(err))
-
     };
 
 
@@ -78,6 +89,9 @@ const Movies = (): JSX.Element => {
                 {movies?.map((elem, index): JSX.Element => (
                     <Moviecard key={index} elem={elem} />
                 ))}
+            </div>
+            <div className="">
+                <Pagination myRow={myRow}/>
             </div>
         </>
     )

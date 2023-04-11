@@ -9,7 +9,6 @@ export const Navbar = (): JSX.Element => {
 
     function filteredData(e: any): void {
         const newObj = {
-            pageSize: 1,
             filter: {
                 isFiltered: true,
                 searchText: e,

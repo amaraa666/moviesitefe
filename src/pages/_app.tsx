@@ -6,7 +6,6 @@ import { MySearchText } from '@/component/useContext';
 
 
 export interface IMovieFilter {
-  pageSize: number;
   filter: {
     isFiltered: Boolean;
     searchText: any
@@ -15,7 +14,6 @@ export interface IMovieFilter {
 }
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const Obj: any = {
-    pagesize: 1,
     filter: {
       isFiltered: false,
       searchText: "",
