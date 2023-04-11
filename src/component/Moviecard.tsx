@@ -10,9 +10,9 @@ interface myProps {
 export const Moviecard = ({ elem }: myProps): JSX.Element => {
     if (elem.poster) {
         return (
-            <div className="w-full flex justify-center items-center flex-col">
-                <img src={elem.poster} width={200} alt={elem.title} />
-                <span>{elem.title}</span>
+            <div className="w-full flex justify-center items-center flex-col py-2">
+                <img src={elem.poster} width={300} alt={elem.title} />
+                <span className="text-2xl font-medium p-1">{elem.title}</span>
             </div>
         )
     } else {

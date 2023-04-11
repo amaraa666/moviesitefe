@@ -6,18 +6,14 @@ import { MySearchText } from '@/component/useContext';
 
 
 export interface IMovieFilter {
-  filter: {
     isFiltered: Boolean;
     searchText: any
-    rated: number
-  }
-}
+};
+
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const Obj: any = {
-    filter: {
       isFiltered: false,
       searchText: "",
-    }
   }
   const [myVal, setMyVal] = useState<IMovieFilter>(Obj)
 

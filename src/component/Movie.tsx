@@ -5,6 +5,7 @@ import axios from "axios";
 import { MySearchText } from "./useContext";
 import { useContext } from "react";
 import Pagination from './Pagination';
+import {useRouter} from "next/router";
 
 
 export interface IMovie {
@@ -53,20 +54,23 @@ interface IProp{
 
 const Movies = (): JSX.Element => {
     const [movies, setMovies] = useState<Array<IMovie>>([]);
-    const [myRow , setMyRow] = useState<IProp>()
-    const [myPage ,setMyPage] = useState('')
-
+    const [myRow , setMyRow] = useState<IProp>();
     const { myVal } = useContext(MySearchText);
+
+
+    const route = useRouter();
+    const {page} = route.query;
+
 
     useEffect(() => {
         getData();
-    }, [myVal , myPage]);
+    }, [myVal , page]);
 
-    const getData = async () => {
+    const getData = () => {
         console.log(myVal)
-        const page = new URLSearchParams(window.location.search)
-        setMyPage(page.get("page"))
-        const res = await axios
+        const myPage = page ? page : 1
+        console.log(myPage)
+        axios
             .post('http://localhost:6060/api/movies',{ myVal , myPage})
             .then((res) => {
                 console.log(res.data.result);
@@ -74,7 +78,7 @@ const Movies = (): JSX.Element => {
                 const { totalRows } = res.data;
                 const myProp ={
                     pageSize: Math.floor(totalRows/30),
-                    totalRows
+                    pageNumber: myPage
                 }
                 console.log(myProp)
                 setMyRow(myProp);
@@ -82,15 +86,18 @@ const Movies = (): JSX.Element => {
             .catch((err) => console.log(err))
     };
 
-
+console.log(myVal.isFiltered)
     return (
         <>
+        <div className={`${myVal.isFiltered ? "block" : "hidden"}`}>
+            <span className="text-2xl">Result: {movies?.length}</span>
+        </div>
             <div className="grid grid-cols-4">
                 {movies?.map((elem, index): JSX.Element => (
                     <Moviecard key={index} elem={elem} />
                 ))}
             </div>
-            <div className="">
+            <div className="flex justify-center p-10">
                 <Pagination myRow={myRow}/>
             </div>
         </>

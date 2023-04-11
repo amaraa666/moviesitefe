@@ -9,10 +9,8 @@ export const Navbar = (): JSX.Element => {
 
     function filteredData(e: any): void {
         const newObj = {
-            filter: {
                 isFiltered: true,
-                searchText: e,
-            }
+                searchText: e
         }
         setMyVal(newObj);
     };
