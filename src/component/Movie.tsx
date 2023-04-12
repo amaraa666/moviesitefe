@@ -5,7 +5,7 @@ import axios from "axios";
 import { MySearchText } from "./useContext";
 import { useContext } from "react";
 import Pagination from './Pagination';
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 
 export interface IMovie {
@@ -47,37 +47,37 @@ export interface IMovie {
     };
 }
 
-interface IProp{
+interface IProp {
     pageSize: number;
-    totalRows: number;
+    totalRows: number | string;
 }
 
 const Movies = (): JSX.Element => {
     const [movies, setMovies] = useState<Array<IMovie>>([]);
-    const [myRow , setMyRow] = useState<IProp>();
+    const [myRow, setMyRow] = useState<IProp>();
     const { myVal } = useContext(MySearchText);
 
 
     const route = useRouter();
-    const {page} = route.query;
+    const { page } = route.query;
 
 
     useEffect(() => {
         getData();
-    }, [myVal , page]);
+    }, [myVal, page]);
 
     const getData = () => {
         console.log(myVal)
         const myPage = page ? page : 1
         console.log(myPage)
         axios
-            .post('http://localhost:6060/api/movies',{ myVal , myPage})
+            .post('http://localhost:6060/api/movies', { myVal, myPage })
             .then((res) => {
                 console.log(res.data.result);
                 setMovies(res.data.result);
                 const { totalRows } = res.data;
-                const myProp ={
-                    pageSize: Math.floor(totalRows/30),
+                const myProp: any = {
+                    pageSize: Math.floor(totalRows / 30),
                     pageNumber: myPage
                 }
                 console.log(myProp)
@@ -86,19 +86,19 @@ const Movies = (): JSX.Element => {
             .catch((err) => console.log(err))
     };
 
-console.log(myVal.isFiltered)
+    console.log(myVal.isFiltered)
     return (
         <>
-        <div className={`${myVal.isFiltered ? "block" : "hidden"}`}>
-            <span className="text-2xl">Result: {movies?.length}</span>
-        </div>
+            <div className={`${myVal.isFiltered ? "block" : "hidden"}`}>
+                <span className="text-2xl">Result: {movies?.length}</span>
+            </div>
             <div className="grid grid-cols-4">
                 {movies?.map((elem, index): JSX.Element => (
                     <Moviecard key={index} elem={elem} />
                 ))}
             </div>
             <div className="flex justify-center p-10">
-                <Pagination myRow={myRow}/>
+                <Pagination myRow={myRow} />
             </div>
         </>
     )
